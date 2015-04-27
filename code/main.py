@@ -13,17 +13,17 @@ import os
 from navnav_funcs import *
 import time
 import scipy.io
-from PyPDF2 import PdfFileWriter, PdfFileReader
+#from PyPDF2 import PdfFileWriter, PdfFileReader
 
 
 if __name__ == '__main__': 
     
     # Show full floor room layout
-    #show_room_order(5) 
+    #show_room_order(3) 
     
     
 ### NAVIGATE NAVITAS, AKA. NAVNAV
-    run_navnav = 1
+    run_navnav = 0
     if run_navnav == 1:
         # Getting user input
     
