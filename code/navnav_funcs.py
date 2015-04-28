@@ -165,6 +165,74 @@ def search_room(chosen_floor,room):
     plt.imshow(maps,cmap='gray',vmin=0,vmax=255)
     
     plt.savefig('../maps/map_test.png',dpi = 400)
+
+
+def search_room_web(chosen_floor,room):
+    # Now searching through list for location
+    mat = scipy.io.loadmat('navnav_coors_improved.mat')
+    # n_data contain [360,91,72] i.e. degrees, days, turbines
+    navnav_coors = np.array(mat['coors'])
+    
+    if chosen_floor == 0:
+    
+        # Floor 0
+        scaling = 2.4
+        add_x = -610#-450
+        add_y = -130
+    elif chosen_floor == 1:
+        # Floor 1
+        scaling = 2.4
+        add_x = -610#-450
+        add_y = -130
+    elif chosen_floor == 3:
+        # Floor 3
+        scaling = 2.4
+        add_x = -600#-450
+        add_y = -100
+        #chosen_floor = chosen_floor -1
+    elif chosen_floor == 4: 
+        # Floor 4
+        scaling = 2.4
+        add_x = -600#-450
+        add_y = -85
+        #chosen_floor = chosen_floor -1
+    elif chosen_floor == 5:
+        # Floor 5
+        scaling = 2.4
+        add_x = -610#-450
+        add_y = -100
+        #chosen_floor = chosen_floor -1
+    
+
+    if chosen_floor > 2:
+        chosen_floor_data = chosen_floor -1
+    else:
+        chosen_floor_data = chosen_floor
+
+    
+    x_coor_room = add_x+scaling*navnav_coors[chosen_floor_data,room,0]
+    y_coor_room = add_y+scaling*navnav_coors[chosen_floor_data,0,room]
+    
+    # Checking if room exist
+    if np.isnan(x_coor_room) or np.isnan(y_coor_room):
+        print 'Room does not exist, will not be saving an image '
+        return
+        
+    
+    fig = plt.figure()
+    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+    
+    ax.scatter(x_coor_room,y_coor_room,color = 'r',alpha = 0.8, vmin = 0, vmax = 250)    
+    ax.annotate('Room ' + str(room), (x_coor_room+50,y_coor_room+50))
+    ax.axis('off')
+    
+
+    maps = Image.open('../maps/png/'+str(chosen_floor)+'.png')
+        
+    
+    plt.imshow(maps,cmap='gray',vmin=0,vmax=255)
+    
+    plt.savefig('../maps/web/'+str(chosen_floor)+'/'+str(room)+'.png',dpi = 400)
     
 
     

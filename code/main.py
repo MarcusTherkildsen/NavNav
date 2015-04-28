@@ -19,7 +19,28 @@ import scipy.io
 if __name__ == '__main__': 
     
     # Show full floor room layout
-    #show_room_order(3) 
+    #show_room_order(1) 
+    
+    # Create maps for webpage
+    run_navnav_web = 0
+    if run_navnav_web == 1:
+        
+        
+        chosen_floor = 0#int(user_input[0:2]) 
+        
+        for room in xrange(250):
+
+            
+            # Now plotting location on map background
+            search_room_web(chosen_floor,room)
+        
+        print 
+        print 'Your map can be found in /maps/map_test.png'
+        print 'Thank you for using NavNav'    
+    
+    
+    
+    
     
     
 ### NAVIGATE NAVITAS, AKA. NAVNAV
