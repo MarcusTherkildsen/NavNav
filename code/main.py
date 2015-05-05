@@ -19,20 +19,25 @@ import scipy.io
 if __name__ == '__main__': 
     
     # Show full floor room layout
-    #show_room_order(1) 
+    #show_room_order(5) 
     
     # Create maps for webpage
     run_navnav_web = 0
     if run_navnav_web == 1:
         
+        # Now searching through list for location
+        mat = scipy.io.loadmat('navnav_coors_improved.mat')
+        # n_data contain [360,91,72] i.e. degrees, days, turbines
+        navnav_coors = np.array(mat['coors'])
         
-        chosen_floor = 0#int(user_input[0:2]) 
         
-        for room in xrange(250):
-
-            
-            # Now plotting location on map background
-            search_room_web(chosen_floor,room)
+        for chosen_floor in [0,1,3,4,5]: 
+        
+            for room in xrange(250):
+    
+                print 'Now plotting floor ' + str(chosen_floor)+', room ' + str(room)
+                # Now plotting location on map background
+                search_room_web(chosen_floor,room,navnav_coors)
         
         print 
         print 'Your map can be found in /maps/map_test.png'
