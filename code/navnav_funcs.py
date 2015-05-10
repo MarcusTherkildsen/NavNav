@@ -22,10 +22,8 @@ from PIL import Image
 
 def show_room_order(chosen_floor):    
     
-    if chosen_floor == 2 :
-            print 
-            sys.exit('No data available for this floor')
-    elif chosen_floor > 5 or chosen_floor <0:
+
+    if chosen_floor > 7 or chosen_floor <0:
         print 
         sys.exit('Floor does not exist')    
     
@@ -46,6 +44,12 @@ def show_room_order(chosen_floor):
         scaling = 1.35
         add_x = -410
         add_y = -238
+        
+    elif chosen_floor == 2:
+        scaling = 1.59
+        add_x = -590
+        add_y = -410
+        
     elif chosen_floor == 3:
         # Floor 3
         scaling = 1.282
@@ -64,36 +68,48 @@ def show_room_order(chosen_floor):
         add_x = -430
         add_y = -114
         
+    elif chosen_floor == 6:
+        scaling = 1.75
+        add_x = -660
+        add_y = -244
         
-    if chosen_floor > 2:
-        chosen_floor_data = chosen_floor -1
-    else:
-        chosen_floor_data = chosen_floor
-
+    elif chosen_floor == 7:
+        scaling = 1.75
+        add_x = -660
+        add_y = -244
+        
+        
+    #if chosen_floor > 2:
+    #    chosen_floor_data = chosen_floor -1
+    #else:
+    #    chosen_floor_data = chosen_floor
+    chosen_floor_data = chosen_floor
 
 
     
     color_ = np.arange(len(navnav_coors[0,:,0]))
     
 
-    fig = plt.figure()
-    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=False)#, axisbg='#d5de9c')
-    sc = ax.scatter(add_x+scaling*navnav_coors[chosen_floor_data,:,0],add_y+scaling*navnav_coors[chosen_floor_data,0,:],c = color_,alpha = 0.8, vmin = 0, vmax = 250)# colors[xc], alpha = 0.8)    
+    plt.figure()
+    #ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=False)#, axisbg='#d5de9c')
+    plt.scatter(add_x+scaling*navnav_coors[chosen_floor_data,:,0],add_y+scaling*navnav_coors[chosen_floor_data,0,:],c = color_,alpha = 1, vmin = 0, vmax = 250)# colors[xc], alpha = 0.8)    
 
-    ax.axis('off')
-    plt.colorbar(sc)
+    plt.axis('off')
+    cb = plt.colorbar()
     
+    # Removes white lines in colorbar
+    cb.solids.set_edgecolor("face")
         
     #maps = Image.open('../maps/png/'+str(chosen_floor)+'.png')
+
     maps = Image.open('../maps/final_png/'+str(chosen_floor)+'_png.png')    
-    
     
     plt.imshow(maps,cmap='gray',vmin=0,vmax=255)
     
-    plt.savefig('../maps/map_test.png',dpi = 400)
+    plt.savefig('../maps/map_test.jpg',dpi = 400,bbox_inches='tight')
     
     print 
-    print 'Your map can be found in /maps/map_test.png'
+    print 'Your map can be found in /maps/map_test.jpg'
     print 'Thank you for using NavNav'
     return None
 
@@ -118,6 +134,12 @@ def search_room(chosen_floor,room):
         scaling = 1.35
         add_x = -410
         add_y = -238
+        
+    elif chosen_floor == 2:
+        scaling = 1.59
+        add_x = -590
+        add_y = -410
+        
     elif chosen_floor == 3:
         # Floor 3
         scaling = 1.282
@@ -135,12 +157,23 @@ def search_room(chosen_floor,room):
         scaling = 1.217
         add_x = -430
         add_y = -114
-    
-
-    if chosen_floor > 2:
-        chosen_floor_data = chosen_floor -1
-    else:
-        chosen_floor_data = chosen_floor
+        
+    elif chosen_floor == 6:
+        scaling = 1.75
+        add_x = -660
+        add_y = -244
+        
+    elif chosen_floor == 7:
+        scaling = 1.75
+        add_x = -660
+        add_y = -244
+        
+        
+    #if chosen_floor > 2:
+    #    chosen_floor_data = chosen_floor -1
+    #else:
+    #    chosen_floor_data = chosen_floor
+    chosen_floor_data = chosen_floor
 
     
     x_coor_room = add_x+scaling*navnav_coors[chosen_floor_data,room,0]
@@ -151,12 +184,20 @@ def search_room(chosen_floor,room):
         print 
         sys.exit('Room does not exist')
     
-    fig = plt.figure()
-    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+    plt.figure()
     
-    ax.scatter(x_coor_room,y_coor_room,color = 'r',alpha = 0.8, vmin = 0, vmax = 250)    
-    ax.annotate('Room ' + str(room), (x_coor_room+50,y_coor_room+50))
-    ax.axis('off')
+    plt.scatter(x_coor_room,y_coor_room,color = 'r',alpha = 1, vmin = 0, vmax = 250)    
+    
+    gsd = len(str(room))
+    
+    if gsd == 1:       
+        plt.annotate('0'+str(chosen_floor)+'.00'+ str(room), (960,0))
+    if gsd == 2:
+        plt.annotate('0'+str(chosen_floor)+'.0'+ str(room), (960,0))
+    if gsd == 3:
+        plt.annotate('0'+str(chosen_floor)+'.'+ str(room), (960,0))
+        
+    plt.axis('off')
     
 
     maps = Image.open('../maps/final_png/'+str(chosen_floor)+'_png.png')
@@ -164,7 +205,7 @@ def search_room(chosen_floor,room):
     
     plt.imshow(maps,cmap='gray',vmin=0,vmax=255)
     
-    plt.savefig('../maps/map_test.png',dpi = 400)
+    plt.savefig('../maps/map_test.jpg',dpi = 400,bbox_inches='tight')
 
 
 def search_room_web(chosen_floor,room,navnav_coors):
@@ -182,6 +223,12 @@ def search_room_web(chosen_floor,room,navnav_coors):
         scaling = 1.35
         add_x = -410
         add_y = -238
+        
+    elif chosen_floor == 2:
+        scaling = 1.59
+        add_x = -590
+        add_y = -410
+        
     elif chosen_floor == 3:
         # Floor 3
         scaling = 1.282
@@ -199,12 +246,23 @@ def search_room_web(chosen_floor,room,navnav_coors):
         scaling = 1.217
         add_x = -430
         add_y = -114
-    
-
-    if chosen_floor > 2:
-        chosen_floor_data = chosen_floor -1
-    else:
-        chosen_floor_data = chosen_floor
+        
+    elif chosen_floor == 6:
+        scaling = 1.75
+        add_x = -660
+        add_y = -244
+        
+    elif chosen_floor == 7:
+        scaling = 1.75
+        add_x = -660
+        add_y = -244
+        
+        
+    #if chosen_floor > 2:
+    #    chosen_floor_data = chosen_floor -1
+    #else:
+    #    chosen_floor_data = chosen_floor
+    chosen_floor_data = chosen_floor
 
     
     x_coor_room = add_x+scaling*navnav_coors[chosen_floor_data,room,0]
@@ -214,14 +272,24 @@ def search_room_web(chosen_floor,room,navnav_coors):
     if np.isnan(x_coor_room) or np.isnan(y_coor_room):
         print 'Room does not exist, will not be saving an image '
         return
-        
+    else:
+        print 'Now plotting floor ' + str(chosen_floor)+', room ' + str(room)        
     
-    fig = plt.figure()
-    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+    plt.figure()
     
-    ax.scatter(x_coor_room,y_coor_room,color = 'r',alpha = 0.8, vmin = 0, vmax = 250)    
-    ax.annotate('Room ' + str(room), (x_coor_room+50,y_coor_room+50))
-    ax.axis('off')
+    plt.scatter(x_coor_room,y_coor_room,color="#AA0000",alpha = 1, vmin = 0, vmax = 250)    
+    
+    gsd = len(str(room))
+    
+    if gsd == 1:       
+        plt.annotate('0'+str(chosen_floor)+'.00'+ str(room), (960,0))
+    if gsd == 2:
+        plt.annotate('0'+str(chosen_floor)+'.0'+ str(room), (960,0))
+    if gsd == 3:
+        plt.annotate('0'+str(chosen_floor)+'.'+ str(room), (960,0))    
+    
+    
+    plt.axis('off')
     
 
     maps = Image.open('../maps/final_png/'+str(chosen_floor)+'_png.png')
@@ -229,7 +297,8 @@ def search_room_web(chosen_floor,room,navnav_coors):
     
     plt.imshow(maps,cmap='gray',vmin=0,vmax=255)
     
-    plt.savefig('../maps/navnav_web/'+str(chosen_floor)+'/'+str(room)+'.png',dpi = 400)
+    
+    plt.savefig('../maps/navnav_web_jpg/'+str(chosen_floor)+'/'+str(room)+'.jpg',dpi = 400,bbox_inches='tight')
     
     plt.close('all')
     

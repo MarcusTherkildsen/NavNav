@@ -19,7 +19,7 @@ import scipy.io
 if __name__ == '__main__': 
     
     # Show full floor room layout
-    #show_room_order(5) 
+    #show_room_order(7) 
     
     # Create maps for webpage
     run_navnav_web = 0
@@ -31,11 +31,11 @@ if __name__ == '__main__':
         navnav_coors = np.array(mat['coors'])
         
         
-        for chosen_floor in [0,1,3,4,5]: 
+        for chosen_floor in [6]:#[0,1,2,3,4,5]: 
         
             for room in xrange(250):
     
-                print 'Now plotting floor ' + str(chosen_floor)+', room ' + str(room)
+                
                 # Now plotting location on map background
                 search_room_web(chosen_floor,room,navnav_coors)
         
@@ -62,10 +62,8 @@ if __name__ == '__main__':
         #print 'Which floor do you want to go to? (e.g. 5)'
         #chosen_floor = int(raw_input())
         
-        if chosen_floor == 2 :
-            print 
-            sys.exit('No data available for this floor')
-        elif chosen_floor > 5 or chosen_floor <0:
+
+        if chosen_floor > 7 or chosen_floor <0:
             print 
             sys.exit('Floor does not exist')
             
