@@ -7,7 +7,7 @@ Created on Sat Apr 25 22:54:15 2015
 from __future__ import division
 import matplotlib.pyplot as plt
 import numpy as np
-import sys
+import sys,codecs
 #import subprocess
 #import os
 #import win32api, win32con
@@ -18,6 +18,80 @@ import sys
 import scipy.io
 from PIL import Image
 
+
+def extra(string,chosen_floor,navnav_coors):
+    
+    # load string txt and plot the selected floor
+
+    string_room = open(string+'.txt', 'r').read().split('\n')    
+
+    string_on_chosen_floor = []   
+    
+    print string_room
+    
+    for ghj in xrange(len(string_room)):
+        if string_room[ghj][1] == str(chosen_floor):
+            string_on_chosen_floor.append(string_room[ghj][3:6])
+            
+        
+    print string_on_chosen_floor
+        
+
+    # Adjusting coordinates
+    scaling, add_x, add_y = adjust_coors(chosen_floor)
+    x_coor_room = add_x+scaling*navnav_coors[chosen_floor,string_on_chosen_floor,0]
+    y_coor_room = add_y+scaling*navnav_coors[chosen_floor,0,string_on_chosen_floor]
+    
+ 
+    
+    # Correcting  placement of toilets
+    if string == 'toilet':
+        for vjk in xrange(len(string_on_chosen_floor)):
+            if chosen_floor == 4 and string_on_chosen_floor[vjk] == '005':
+                print 'Found it ! '
+                x_coor_room[vjk] = x_coor_room[vjk]+30
+                y_coor_room[vjk] = y_coor_room[vjk]-25
+                
+            elif chosen_floor == 5 and string_on_chosen_floor[vjk] == '191':
+                print 'Found it ! '
+                x_coor_room[vjk] = x_coor_room[vjk]
+                y_coor_room[vjk] = y_coor_room[vjk]-50
+    
+    
+
+    print 'Now plotting '+str(string)+' on floor ' + str(chosen_floor)      
+
+    # Plotting dot in searched room    
+    plt.figure()    
+    plt.scatter(x_coor_room,y_coor_room,color="#AA0000", vmin = 0, vmax = 250)    
+ 
+    # Annotating room   
+    if string == 'kitchen':
+        # The following lines are needed for the danish letter ø
+        reload(sys)
+        sys.setdefaultencoding('UTF-8')
+        plt.annotate('0'+str(chosen_floor)+', '+'køkken', (960,0))       
+    else:
+        plt.annotate('0'+str(chosen_floor)+', '+str(string), (960,0))    
+        
+    plt.axis('off')
+    
+    # Loading map background
+    maps = Image.open('../maps/final_png/'+str(chosen_floor)+'_png.png')
+        
+    # Plotting map background
+    plt.imshow(maps,cmap='gray',vmin=0,vmax=255)
+    
+
+    # Saving final map
+    plt.savefig('../maps/'+str(string)+'/'+str(chosen_floor)+'.jpg',dpi = 400,bbox_inches='tight')
+    
+    print 
+    print 'Your map can be found in /maps/map_test.jpg'
+    print 'Thank you for using NavNav'
+    print
+    
+    return None
 
 def adjust_coors(chosen_floor):
     

@@ -50,8 +50,21 @@ if __name__ == '__main__':
         print 
         print 'Your map can be found in /maps/map_test.png'
         print 'Thank you for using NavNav'
-    
-      
+        
+        
+    #### Create maps for toilet and print rooms
+    extras = 0
+    if extras == 1:
+        
+        # Loading coordinates
+        mat = scipy.io.loadmat('navnav_coors_improved.mat')
+        navnav_coors = np.array(mat['coors'])
+        
+        for xkg in ['kitchen','print','toilet']:
+            for cnv in xrange(8):
+                extra(xkg,cnv,navnav_coors)
+ 
+     
     #### Create maps for webpage
     run_navnav_web = 0
     if run_navnav_web == 1:
@@ -71,7 +84,3 @@ if __name__ == '__main__':
         print 
         print 'Your map can be found in /maps/map_test.png'
         print 'Thank you for using NavNav'    
-    
-    
-    
-        
