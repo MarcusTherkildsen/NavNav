@@ -19,7 +19,7 @@ import scipy.io
 from PIL import Image
 
 
-def extra(string,chosen_floor,navnav_coors):
+def navnav_extra(string,chosen_floor,navnav_coors,save_txt=0):
     
     # load string txt and plot the selected floor
 
@@ -27,7 +27,7 @@ def extra(string,chosen_floor,navnav_coors):
 
     string_on_chosen_floor = []   
     
-    print string_room
+    #print string_room
     
     for ghj in xrange(len(string_room)):
         if string_room[ghj][1] == str(chosen_floor):
@@ -51,36 +51,62 @@ def extra(string,chosen_floor,navnav_coors):
                 print 'Found it ! '
                 x_coor_room[vjk] = x_coor_room[vjk]+30
                 y_coor_room[vjk] = y_coor_room[vjk]-25
+                string_on_chosen_floor[vjk] = '058'
                 
             elif chosen_floor == 5 and string_on_chosen_floor[vjk] == '191':
                 print 'Found it ! '
                 x_coor_room[vjk] = x_coor_room[vjk]
                 y_coor_room[vjk] = y_coor_room[vjk]-50
+                string_on_chosen_floor[vjk] = '053'
+    # getting an error here. It says that the data contains nans. 
+    # Does not make sense
+    
+    for fdc in xrange(len(x_coor_room)):
+        x_coor_room[fdc] = int(float(x_coor_room[fdc]))
+        y_coor_room[fdc] = int(float(y_coor_room[fdc]))
+    if save_txt ==1:
+        # Save these improved coordinates
+        np.savetxt(str(chosen_floor)+'_'+string+'_coor_X.txt',x_coor_room,fmt ='%0.5f',delimiter=',')
+        np.savetxt(str(chosen_floor)+'_'+string+'_coor_Y.txt',y_coor_room,fmt ='%0.5f',delimiter=',')
     
     
-
     print 'Now plotting '+str(string)+' on floor ' + str(chosen_floor)      
 
     # Plotting dot in searched room    
-    plt.figure()    
-    plt.scatter(x_coor_room,y_coor_room,color="#AA0000", vmin = 0, vmax = 250)    
+    fig, ax = plt.subplots()
+    
+    ax.scatter(x_coor_room,y_coor_room,color="#AA0000", vmin = 0, vmax = 250)
+    man_leg_start = 980
+    for fxc in xrange(len(x_coor_room)):    
+        
+        ax.annotate(str(fxc+1), (x_coor_room[fxc]-7,y_coor_room[fxc]+10),color ='w',fontsize = 6)    
+        
+        # Manuel legend
+        ax.plot(man_leg_start,40+50*fxc,'o',color="#AA0000",markeredgecolor="#AA0000")
+        ax.annotate(str(fxc+1), (man_leg_start-6.5,40+50*fxc+10),color ='w',fontsize = 6)
+        # Room number
+        ax.annotate(string_on_chosen_floor[fxc], (man_leg_start+25,40+50*fxc+10),color ='k',fontsize = 6)
+        
+
+    #ax.legend(scatterpoints=1) 
+     
  
     # Annotating room   
     if string == 'kitchen':
         # The following lines are needed for the danish letter ø
         reload(sys)
         sys.setdefaultencoding('UTF-8')
-        plt.annotate('0'+str(chosen_floor)+', '+'køkken', (960,0))       
+        ax.annotate('0'+str(chosen_floor)+'.'+'køkken', (960,0))       
     else:
-        plt.annotate('0'+str(chosen_floor)+', '+str(string), (960,0))    
+        ax.annotate('0'+str(chosen_floor)+'.'+str(string), (960,0))    
         
-    plt.axis('off')
+    ax.axis('off')
     
     # Loading map background
     maps = Image.open('../maps/final_png/'+str(chosen_floor)+'_png.png')
         
     # Plotting map background
-    plt.imshow(maps,cmap='gray',vmin=0,vmax=255)
+    ax.imshow(maps,cmap='gray',vmin=0,vmax=255)
     
 
     # Saving final map

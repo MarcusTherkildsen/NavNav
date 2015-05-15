@@ -62,7 +62,7 @@ if __name__ == '__main__':
         
         for xkg in ['kitchen','print','toilet']:
             for cnv in xrange(8):
-                extra(xkg,cnv,navnav_coors)
+                print navnav_extra(xkg,cnv,navnav_coors,0)
  
      
     #### Create maps for webpage
