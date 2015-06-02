@@ -26,15 +26,17 @@ def navnav_extra(string,chosen_floor,navnav_coors,save_txt=0):
     string_room = open(string+'.txt', 'r').read().split('\n')    
 
     string_on_chosen_floor = []   
-    
+    extra_text_on_chosen_floor = []
     #print string_room
+    
     
     for ghj in xrange(len(string_room)):
         if string_room[ghj][1] == str(chosen_floor):
             string_on_chosen_floor.append(string_room[ghj][3:6])
-            
+            if string == 'print' or 'kitchen':
+                extra_text_on_chosen_floor.append(string_room[ghj][9:-1])
         
-    print string_on_chosen_floor
+    #print string_on_chosen_floor
         
 
     # Adjusting coordinates
@@ -79,13 +81,33 @@ def navnav_extra(string,chosen_floor,navnav_coors,save_txt=0):
     man_leg_start = 980
     for fxc in xrange(len(x_coor_room)):    
         
-        ax.annotate(str(fxc+1), (x_coor_room[fxc]-7,y_coor_room[fxc]+10),color ='w',fontsize = 6)    
+         
         
-        # Manuel legend
-        ax.plot(man_leg_start,40+50*fxc,'o',color="#AA0000",markeredgecolor="#AA0000")
+        if extra_text_on_chosen_floor[fxc] == 'Stud.' or extra_text_on_chosen_floor[fxc] == 'Alle' or extra_text_on_chosen_floor[fxc] == 'AU':
+            
+            # Manuel legend
+            ax.plot(man_leg_start,40+50*fxc,'o',color='b',markeredgecolor='b')
+            ax.scatter(x_coor_room[fxc],y_coor_room[fxc],color='b', vmin = 0, vmax = 250)
+            
+        else:
+            # Manuel legend
+            ax.plot(man_leg_start,40+50*fxc,'o',color="#AA0000",markeredgecolor="#AA0000")
+            
+        # White numbers
+        ax.annotate(str(fxc+1), (x_coor_room[fxc]-7,y_coor_room[fxc]+10),color ='w',fontsize = 6)   
         ax.annotate(str(fxc+1), (man_leg_start-6.5,40+50*fxc+10),color ='w',fontsize = 6)
-        # Room number
-        ax.annotate(string_on_chosen_floor[fxc], (man_leg_start+25,40+50*fxc+10),color ='k',fontsize = 6)
+        
+
+        if extra_text_on_chosen_floor[fxc] == '':
+            ax.annotate(string_on_chosen_floor[fxc], (man_leg_start+25,40+50*fxc+10),color ='k',fontsize = 6)
+        else:
+            
+            #print string_on_chosen_floor[fxc]#string_room[fxc][9:-1]
+            
+            
+            # Room number
+            ax.annotate(string_on_chosen_floor[fxc]+', '+extra_text_on_chosen_floor[fxc], (man_leg_start+25,40+50*fxc+10),color ='k',fontsize = 6)
+
         
 
     #ax.legend(scatterpoints=1) 

@@ -52,7 +52,7 @@ if __name__ == '__main__':
         print 'Thank you for using NavNav'
         
         
-    #### Create maps for toilet and print rooms
+    #### Create maps for kitchen, toilet and print rooms
     extras = 0
     if extras == 1:
         
