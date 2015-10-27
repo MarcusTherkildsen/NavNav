@@ -13,74 +13,74 @@ import os
 from navnav_funcs import *
 import time
 import scipy.io
-#from PyPDF2 import PdfFileWriter, PdfFileReader
+# from PyPDF2 import PdfFileWriter, PdfFileReader
 
+if __name__ == '__main__':
 
-if __name__ == '__main__': 
-    
-    #### Show full floor room layout
-    #show_room_order(5) 
-    
-    
-    #### NAVIGATE NAVITAS, AKA. NAVNAV
+    # Show full floor room layout
+    # show_room_order(5)
+
+    '''
+    NAVIGATE NAVITAS, AKA. NAVNAV
+    '''
+    # Original NAVNAV
     run_navnav = 1
+
+    # Create maps for webpage
+    run_navnav_web = 0
+
+    # Create maps for kitchen, toilet and print rooms
+    extras = 0
+
     if run_navnav == 1:
         # Getting user input
-    
+
         print 'Which room do you want to go to? (e.g. 05.010)'
         user_input = raw_input()
-        
-        chosen_floor = int(user_input[0:2]) 
-        room = int(user_input[3:])
-        
 
-        if chosen_floor > 7 or chosen_floor <0:
-            print 
+        chosen_floor = int(user_input[0:2])
+        room = int(user_input[3:])
+
+        if chosen_floor > 7 or chosen_floor < 0:
+            print
             sys.exit('Floor does not exist')
-            
+
         if room < 0 or room > 250:
-            print 
+            print
             sys.exit('Room does not exist')
-        
-        print 'Now locating floor ' + str(chosen_floor)+ ', room ' + str(room)
-        
+
+        print 'Now locating floor ' + str(chosen_floor) + ', room ' + str(room)
+
         # Now plotting location on map background
-        search_room(chosen_floor,room)
-        
-        print 
+        search_room(chosen_floor, room)
+
+        print
         print 'Your map can be found in /maps/map_test.png'
         print 'Thank you for using NavNav'
-        
-        
-    #### Create maps for kitchen, toilet and print rooms
-    extras = 0
+
     if extras == 1:
-        
+
         # Loading coordinates
         mat = scipy.io.loadmat('navnav_coors_improved.mat')
         navnav_coors = np.array(mat['coors'])
-        
-        for xkg in ['kitchen','print','toilet']:
+
+        for xkg in ['kitchen', 'print', 'toilet']:
             for cnv in xrange(8):
-                print navnav_extra(xkg,cnv,navnav_coors,0)
- 
-     
-    #### Create maps for webpage
-    run_navnav_web = 0
+                print navnav_extra(xkg, cnv, navnav_coors, 0)
+
     if run_navnav_web == 1:
-        
+
         # Loading coordinates
         mat = scipy.io.loadmat('navnav_coors_improved.mat')
         navnav_coors = np.array(mat['coors'])
-                
-        for chosen_floor in xrange(8): 
-        
+
+        for chosen_floor in xrange(8):
+
             for room in xrange(250):
-    
-                
+
                 # Now plotting location on map background
-                search_room_web(chosen_floor,room,navnav_coors)
-        
-        print 
+                search_room_web(chosen_floor, room, navnav_coors)
+
+        print
         print 'Your map can be found in /maps/map_test.png'
-        print 'Thank you for using NavNav'    
+        print 'Thank you for using NavNav'
